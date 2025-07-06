@@ -27,7 +27,7 @@ class SupportController extends Controller
 
     public function create()
     {
-        return view('admin/supports/create');
+        return view('admin.supports.create');
     }
 
     public function store(Request $request, Support $support)
@@ -40,5 +40,28 @@ class SupportController extends Controller
     $support->create($data);
 
     return redirect()->route('supports.index');
+    }
+
+    public function edit(Support $support, string|int $id)
+    {
+        if(!$data = $support->find($id)){
+            return back();
+        }
+
+        return view('admin.supports.edit', compact('data'));
+    }
+
+    public function update(Request $request, Support $support, string $id)
+    {
+        if(!$data = $support->find($id)){
+            return back();
+        }
+
+        $data->update($request->only([
+            'subject',
+            'body'
+        ]));
+
+        return redirect()->route('supports.index');
     }
 }
