@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\{SupportController};
 use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
+Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy'); //Rota para deletar um chamado
 Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update'); // Rota para deletar um chamado
 Route::get('/supports/{id}/edit',  [SupportController::class, 'edit'])->name("supports.edit"); // Rota para editar editar um chamado de acordo com o ID
 Route::get('/supports/create', [SupportController::class, 'create'])->name('supports.create'); // Cria um novo chamado

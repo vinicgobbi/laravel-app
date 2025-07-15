@@ -65,4 +65,15 @@ class SupportController extends Controller
 
         return redirect()->route('supports.index'); // redireciona para a tela principal
     }
+
+	public function destroy(string|int $id)
+	{
+		if(!$data = Support::find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+            return back(); // Retorna para ultimo endereço acessado com sucesso
+        }
+
+		$data->delete(); //Apaga o dado do banco de dados
+
+		return redirect()->route('supports.index');// redireciona para a tela principal
+	}
 }
