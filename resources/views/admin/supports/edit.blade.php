@@ -1,5 +1,11 @@
 <h1>Dúvida {{ $data->id }}</h1>
 
+@if ($errors->any())
+	@foreach ($errors->all() as $error) 
+		{{ $error }}{{-- Imprime os erros de validacao na tela --}}
+	@endforeach
+@endif
+
 <form action="{{ route("supports.update", $data->id) }}" method="POST">
     {{-- <input type="hidden" value="{{ csrf_token() }}" name="_token"> --}}
     @csrf

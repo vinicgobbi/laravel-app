@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
 use Illuminate\Http\Request;
+
 
 class SupportController extends Controller
 {
@@ -30,12 +32,12 @@ class SupportController extends Controller
         return view('admin.supports.create');
     }
 
-    public function store(Request $request, Support $support) // Funcao para armazenar novos dados
+    public function store(StoreUpdateSupport $request, Support $support) // Funcao para armazenar novos dados
     {
 
     // dd($request->only(["subject", "body"])); //Debug
 
-    $data = $request->all(); // Armazena em data todos os dados da request
+    $data = $request->all(); // Armazena em data todos os dados validados da request
     $data['status'] = 'a'; //Adiciona a coluna status, com o valor 'a' para representar aberto
 
     $support->create($data); //salva os dados no Banco de dados
@@ -52,7 +54,7 @@ class SupportController extends Controller
         return view('admin.supports.edit', compact('data')); //Retorna a view para editar o formulario
     }
 
-    public function update(Request $request, Support $support, string $id) // Função par atualizar um chamado
+    public function update(StoreUpdateSupport $request, Support $support, string $id) // Função par atualizar um chamado
     {
         if(!$data = $support->find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
