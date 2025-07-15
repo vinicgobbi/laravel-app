@@ -74,6 +74,6 @@ class SupportController extends Controller
 
 		$data->delete(); //Apaga o dado do banco de dados
 
-		return redirect()->route('supports.index');// redireciona para a tela principal
+		return redirect()->route('supports.index'); // redireciona para a tela principal
 	}
 }
