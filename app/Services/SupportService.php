@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\CreateSupportDTO;
 use stdClass;
 
 class SupportService
@@ -23,17 +24,9 @@ class SupportService
 		return $this->repository->findOne($id);
 	}
 
-	public function new(
-		string $subject,
-		string $status,
-		string $body,
-	):stdClass
+	public function new(CreateSupportDTO $dto):stdClass
 	{
-		return $this->repository->new(
-			$subject,
-			$status,
-			$body,
-		);
+		return $this->repository->new($dto);
 	}
 
 	public function update(

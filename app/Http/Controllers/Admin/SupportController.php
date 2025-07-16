@@ -19,26 +19,25 @@ class SupportController extends Controller
     public function index(Request $request)
     {
         $supports = $this->service->getAll($request->filter); //atribui todos os valores de $support para $supports
-        //dd($supports);//debug
 
-        return view('admin.supports.index', compact('supports')); //retorna a view em admin/supports/index.blade.php e exporta a variavel $supports
+        return view('admin.supports.index', compact('supports')); //retorna a view em admin/supports/index.blade.php e exporta a variável $supports
     }
 
     public function show(string|int $id) // Função para exibir os dados
     {
-        if(!$data = $this->service->findOne($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+        if(!$data = $this->service->findOne($id)){ // Valida se a variável data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
-        return view('admin.supports.show', compact('data')); // retorna a a view do arquivo admin/supports/show exportando a variavel data
+        return view('admin.supports.show', compact('data')); // retorna a a view do arquivo admin/supports/show exportando a variável data
     }
 
-    public function create() //Funcao para criar um novo chamado
+    public function create() //função para criar um novo chamado
     {
         return view('admin.supports.create');
     }
 
-    public function store(StoreUpdateSupport $request, Support $support) // Funcao para armazenar novos dados
+    public function store(StoreUpdateSupport $request, Support $support) // Função para armazenar novos dados
     {
 
     // dd($request->only(["subject", "body"])); //Debug
@@ -53,16 +52,16 @@ class SupportController extends Controller
 
     public function edit(string $id) // Função para editar um chamado
     {
-        if(!$data = $this->service->findOne($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+        if(!$data = $this->service->findOne($id)){ // Valida se a variável data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
-        return view('admin.supports.edit', compact('data')); //Retorna a view para editar o formulario
+        return view('admin.supports.edit', compact('data')); //Retorna a view para editar o formulário
     }
 
     public function update(StoreUpdateSupport $request, Support $support, string $id) // Função par atualizar um chamado
     {
-        if(!$data = $support->find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+        if(!$data = $support->find($id)){ // Valida se a variável data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
