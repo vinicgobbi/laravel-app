@@ -5,22 +5,28 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
+use App\Services\SupportService;
 use Illuminate\Http\Request;
 
 
 class SupportController extends Controller
 {
-    public function index(Support $support)
+
+	public function __construct(
+		protected SupportService $service
+	){}
+
+    public function index(Request $request)
     {
-        $supports = $support->all(); //atribui todos os valores de $support para $supports
+        $supports = $this->service->getAll($request->filter); //atribui todos os valores de $support para $supports
         //dd($supports);//debug
 
         return view('admin.supports.index', compact('supports')); //retorna a view em admin/supports/index.blade.php e exporta a variavel $supports
     }
 
-    public function show(string|int $id, Support $support) // Função para exibir os dados
+    public function show(string|int $id) // Função para exibir os dados
     {
-        if(!$data = $support->find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+        if(!$data = $this->service->findOne($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
@@ -37,7 +43,7 @@ class SupportController extends Controller
 
     // dd($request->only(["subject", "body"])); //Debug
 
-    $data = $request->all(); // Armazena em data todos os dados validados da request
+    $data = $request->validated(); // Armazena em data todos os dados validados da request
     $data['status'] = 'a'; //Adiciona a coluna status, com o valor 'a' para representar aberto
 
     $support->create($data); //salva os dados no Banco de dados
@@ -45,9 +51,9 @@ class SupportController extends Controller
     return redirect()->route('supports.index'); //Volta para a pagina inicial
     }
 
-    public function edit(Support $support, string|int $id) // Função para editar um chamado
+    public function edit(string $id) // Função para editar um chamado
     {
-        if(!$data = $support->find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
+        if(!$data = $this->service->findOne($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
@@ -60,21 +66,14 @@ class SupportController extends Controller
             return back(); // Retorna para ultimo endereço acessado com sucesso
         }
 
-        $data->update($request->only([
-            'subject',
-            'body'
-        ])); // Atualiza os campos de assunto e corpo do chamado
+        $data->update($request->validated()); // Atualiza os campos de assunto e corpo do chamado
 
         return redirect()->route('supports.index'); // redireciona para a tela principal
     }
 
-	public function destroy(string|int $id)
+	public function destroy(string $id)
 	{
-		if(!$data = Support::find($id)){ // Valida se a variavel data vai encontrar algum chamado através do id
-            return back(); // Retorna para ultimo endereço acessado com sucesso
-        }
-
-		$data->delete(); //Apaga o dado do banco de dados
+		$this->service->delete($id);
 
 		return redirect()->route('supports.index'); // redireciona para a tela principal
 	}
