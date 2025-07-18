@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\CreateSupportDTO;
+use App\DTO\UpdateSupportDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
@@ -19,7 +21,7 @@ class SupportController extends Controller
     public function index(Request $request)
     {
         $supports = $this->service->getAll($request->filter); //atribui todos os valores de $support para $supports
-
+       // dd($supports);
         return view('admin.supports.index', compact('supports')); //retorna a view em admin/supports/index.blade.php e exporta a variável $supports
     }
 
@@ -39,15 +41,11 @@ class SupportController extends Controller
 
     public function store(StoreUpdateSupport $request, Support $support) // Função para armazenar novos dados
     {
+        $this->service->new(
+            CreateSupportDTO::makeFromRequest($request)
+        );
 
-    // dd($request->only(["subject", "body"])); //Debug
-
-    $data = $request->validated(); // Armazena em data todos os dados validados da request
-    $data['status'] = 'a'; //Adiciona a coluna status, com o valor 'a' para representar aberto
-
-    $support->create($data); //salva os dados no Banco de dados
-
-    return redirect()->route('supports.index'); //Volta para a pagina inicial
+        return redirect()->route('supports.index'); //Volta para a pagina inicial
     }
 
     public function edit(string $id) // Função para editar um chamado
@@ -61,11 +59,11 @@ class SupportController extends Controller
 
     public function update(StoreUpdateSupport $request, Support $support, string $id) // Função par atualizar um chamado
     {
-        if(!$data = $support->find($id)){ // Valida se a variável data vai encontrar algum chamado através do id
-            return back(); // Retorna para ultimo endereço acessado com sucesso
-        }
+        $support = $this->service->update(UpdateSupportDTO::makeFromRequest($request));
 
-        $data->update($request->validated()); // Atualiza os campos de assunto e corpo do chamado
+        if (!$support){
+            return redirect()->back();
+        }
 
         return redirect()->route('supports.index'); // redireciona para a tela principal
     }
