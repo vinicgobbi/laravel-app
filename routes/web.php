@@ -13,7 +13,7 @@ Route::post('/supports', [SupportController::class, "store"])->name("supports.st
 Route::get('/supports', [SupportController::class, 'index'])->name('supports.index'); // Página principal com a prévia dos chamados
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('supports.index');
 }); // tela de boas vindas do PHP
 
 Route::get('/contato', [SiteController::class, 'contact']); // Chama a classe contact do SiteController
